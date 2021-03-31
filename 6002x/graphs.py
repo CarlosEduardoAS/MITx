@@ -106,7 +106,8 @@ def printPath(path):
             result = result + '->'
     return result
     
-    
+
+#Depth-First-Search Algorithm
 def DFS(graph, start, end, path, shortest, toPrint = False):
     '''Assumes graph is a Digraph; start and end are nodes;
        path and shortest are lists of nodes
@@ -147,3 +148,32 @@ def testSP(source, destination):
         
 testSP('Boston', 'Phoenix')
 
+
+#Breadth-First-Search Algorithm
+def BFS(graph, start, end, toPrint = False):
+    '''Assumes graph is a Digraph; start and end are nodes
+       Returns a shortest path from start to end in a graph'''
+    initPath = [start]
+    pathQueue = [initPath]
+    while len(pathQueue) != 0:
+        #Get and remove oldest element in pathQueue
+        tmpPath = pathQueue.pop(0)
+        if toPrint:
+            print('Current BFS path:', printPath(tmpPath))
+        lastNode = tmpPath[-1]
+        if lastNode == end:
+            return tmpPath
+        for nextNode in graph.childrenOf(lastNode):
+            if nextNode not in tmpPath:
+                newPath = tmpPath + [nextNode]
+                pathQueue.append(newPath)
+    return None
+
+
+def shortestPath(graph, start, end, toPrint = False):
+    '''Assumes graph is a Digraph; start and end are nodes
+       Return a shortest path from start to end in graph'''
+    return BFS(graph, start, end, toPrint)
+
+
+testSP('Boston', 'Phoenix')
