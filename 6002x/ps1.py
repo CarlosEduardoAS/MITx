@@ -165,12 +165,6 @@ def compare_cow_transport_algorithms():
     print(end - start)
 
 
-"""
-Here is some test data for you to see the results of your algorithms with. 
-Do not submit this along with any of your answers. Uncomment the last two
-lines to print the result of your problem.
-"""
-
 cows = load_cows("ps1_cow_data.txt")
 limit=100
 print(cows)
