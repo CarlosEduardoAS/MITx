@@ -171,8 +171,8 @@ def simAll(drunkKinds, walkLengths, numTrials):
     pylab.ylabel('Distance from Origin')
     pylab.legend(loc = 'best')
     
-numSteps = (10, 10, 1000, 10000)
-simAll((UsualDrunk, ColdDrunk), numSteps, 100)
+#numSteps = (10, 10, 1000, 10000)
+#simAll((UsualDrunk, ColdDrunk), numSteps, 100)
 
 def getFinalLocs(numSteps, numTrials, dClass):
     locs = []
@@ -212,4 +212,47 @@ def plotLocs(drunkKinds, numSteps, numTrials):
     pylab.legend(loc = 'upper left')
     
 random.seed(0)
-plotLocs((UsualDrunk, ColdDrunk), 10000, 1000)
+#plotLocs((UsualDrunk, ColdDrunk), 10000, 1000)
+
+
+class OddField(Field):
+    def __init__(self, numHoles = 1000, xRange = 100, yRange = 100):
+        Field.__init__(self)
+        self.wormholes = {}
+        for w in range(numHoles):
+            x = random.randint(-xRange, xRange)
+            y = random.randint(-yRange, yRange)
+            newX = random.randint(-xRange, xRange)
+            newY = random.randint(-yRange, yRange)
+            newLoc = Location(newX, newY)
+            self.wormholes[(x, y)] = newLoc
+            
+    def moveDrunk(self, drunk):
+        Field.moveDrunk(self, drunk)
+        x = self.drunks[drunk].getX()
+        y = self.drunks[drunk].getY()
+        if (x, y) in self.wormholes:
+            self.drunks[drunk] = self.wormholes[(x, y)]
+            
+def traceWalk(fieldKinds, numSteps):
+    styleChoice = styleIterator(('b+', 'r^', 'ko'))
+    for fClass in fieldKinds:
+        d = UsualDrunk('Homer')
+        f = fClass()
+        f.addDrunk(d, Location(0, 0))
+        locs = []
+        for s in range(numSteps):
+            f.moveDrunk(d)
+            locs.append(f.getLoc(d))
+        xVals, yVals = [], []
+        for loc in locs:
+            xVals.append(loc.getX())
+            yVals.append(loc.getY())
+        curStyle = styleChoice.nextStyle()
+        pylab.plot(xVals, yVals, curStyle, label = fClass.__name__)
+        pylab.title('Spots Visited on Walk (' + str(numSteps) + ' steps)')
+        pylab.xlabel('Steps East/West of Origin')
+        pylab.ylabel('Steps North/South of Origin')
+        pylab.legend(loc = 'best')
+        
+traceWalk((Field, OddField), 500)
