@@ -14,9 +14,9 @@ import pylab
 #from ps2_verify_movement35 import testRobotMovement
 # If you get a "Bad magic number" ImportError, you are not using Python 3.5 
 
-# For Python 3.6:
-from ps2_verify_movement36 import testRobotMovement
-# If you get a "Bad magic number" ImportError, you are not using Python 3.6
+# For Python 3.8:
+from ps2_verify_movement38 import testRobotMovement
+# If you get a "Bad magic number" ImportError, you are not using Python 3.8
 
 
 # === Provided class Position
@@ -237,11 +237,16 @@ class StandardRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        next_position = self.getRobotPosition().getNewPosition(self.getRobotDirection(), self.speed)
+        if self.room.isPositionInRoom(next_position) == False:
+            self.setRobotDirection(random.randint(0, 359))
+        else:
+            self.setRobotPosition(next_position)            
+            self.room.cleanTileAtPosition(next_position)
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-##testRobotMovement(StandardRobot, RectangularRoom)
+testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
