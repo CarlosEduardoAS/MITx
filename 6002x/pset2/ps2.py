@@ -268,10 +268,22 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robot_type: class of robot to be instantiated (e.g. StandardRobot or
                 RandomWalkRobot)
     """
-    raise NotImplementedError
+    time_steps = 0
+    for trial in range(num_trials):
+        room = RectangularRoom(width, height)
+        robots = []
+        for robot in range(num_robots):
+            robots.append(robot_type(room, speed))
+        num_tiles = (width*height)*min_coverage
+        while room.getNumCleanedTiles() < num_tiles:
+            for robot in robots:
+                robot.updatePositionAndClean()
+                time_steps += 1
+    return time_steps / num_trials / num_robots
+        
 
 # Uncomment this line to see how much your simulation takes on average
-##print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
 
 
 # === Problem 5
