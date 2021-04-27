@@ -105,18 +105,18 @@ def findPocketReturn(game, numTrials, trialSize, toPrint):
 
 
 random.seed(0)
-numTrials = 20
-resultDict = {}
-games = (FairRoulette, EuRoulette, AmRoulette)
-for G in games:
-    resultDict[G().__str__()] = []
-for numSpins in (100, 1000, 10000, 100000):
-    print('\nSimulate betting a pocket for', numTrials, 'trials of',\
-          numSpins, 'spins each')
-    for G in games:
-        pocketReturns = findPocketReturn(G(), numTrials, numSpins, False)
-        print('Exp. return for', G(), '=',\
-              str(100*sum(pocketReturns)/float(len(pocketReturns))) + '%')
+# numTrials = 20
+# resultDict = {}
+# games = (FairRoulette, EuRoulette, AmRoulette)
+# for G in games:
+#     resultDict[G().__str__()] = []
+# for numSpins in (100, 1000, 10000, 100000):
+#     print('\nSimulate betting a pocket for', numTrials, 'trials of',\
+#           numSpins, 'spins each')
+#     for G in games:
+#         pocketReturns = findPocketReturn(G(), numTrials, numSpins, False)
+#         print('Exp. return for', G(), '=',\
+#               str(100*sum(pocketReturns)/float(len(pocketReturns))) + '%')
             
 
 def getMeanAndStd(X):
@@ -126,3 +126,41 @@ def getMeanAndStd(X):
         tot += (x - mean)**2
     std = (tot/len(X))**0.5
     return mean, std
+
+
+# numTrials = 20
+# resultDict = {}
+# games = (FairRoulette, EuRoulette, AmRoulette)
+# for G in games:
+#     resultDict[G().__str__()] = []
+# for numSpins in (100, 1000, 10000):
+#     print('\nSimulate betting a pocket for', numTrials, 'trials of',\
+#           numSpins, 'spins each')
+#     for G in games:
+#         pocketReturns = findPocketReturn(G(), 20, numSpins, False)
+#         mean, std = getMeanAndStd(pocketReturns)
+#         resultDict[G().__str__()].append((numSpins,
+#                                           100*mean, 100*std))
+#         print('Exp. return for', G(), '=',\
+#               str(round(100*1.96*std, 3)) + '% with 95% confidence')
+            
+            
+def stdDevOfLengths(L):
+    """
+    L: a list of strings
+
+    returns: float, the standard deviation of the lengths of the strings,
+      or NaN if L is empty.
+    """
+    if (len(L) == 0):
+        return float('NaN')
+    sumVals = 0
+    for s in L:
+        sumVals += len(s)
+    meanVals = sumVals / len(L)
+    sumDevSquared = 0
+    for s in L:
+        sumDevSquared += (len(s) - meanVals)**2
+    variance = sumDevSquared / len(L)
+    stdDev = variance**(.5)
+    return stdDev

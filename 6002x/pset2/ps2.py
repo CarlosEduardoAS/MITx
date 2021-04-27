@@ -246,7 +246,7 @@ class StandardRobot(Robot):
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-testRobotMovement(StandardRobot, RectangularRoom)
+#testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
@@ -270,6 +270,7 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     """
     time_steps = 0
     for trial in range(num_trials):
+        #anim = ps2_visualize.RobotVisualization(num_robots, width, height)
         room = RectangularRoom(width, height)
         robots = []
         for robot in range(num_robots):
@@ -277,13 +278,15 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
         num_tiles = (width*height)*min_coverage
         while room.getNumCleanedTiles() < num_tiles:
             for robot in robots:
+                #anim.update(room, robots)
                 robot.updatePositionAndClean()
                 time_steps += 1
+        #anim.done()
     return time_steps / num_trials / num_robots
         
 
 # Uncomment this line to see how much your simulation takes on average
-print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+#print(runSimulation(3, 1.0, 10, 10, 0.75, 30, StandardRobot))
 
 
 # === Problem 5
@@ -299,7 +302,16 @@ class RandomWalkRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        next_position = self.getRobotPosition().getNewPosition(random.randint(0, 359), self.speed)
+        if self.room.isPositionInRoom(next_position) == False:
+            self.setRobotDirection(random.randint(0, 359))
+        else:
+            self.setRobotDirection(random.randint(0, 359))
+            self.setRobotPosition(next_position)            
+            self.room.cleanTileAtPosition(next_position)
+
+
+#print(runSimulation(3, 1.0, 10, 10, 0.75, 30, RandomWalkRobot))
 
 
 def showPlot1(title, x_label, y_label):
@@ -352,12 +364,12 @@ def showPlot2(title, x_label, y_label):
 # 1) Write a function call to showPlot1 that generates an appropriately-labeled
 #     plot.
 #
-#       (... your call here ...)
+showPlot1("Time It Takes 1 - 10 Robots To Clean 80% Of A Room", "Number of Robots", "Time-steps")
 #
 
 #
 # 2) Write a function call to showPlot2 that generates an appropriately-labeled
 #     plot.
 #
-#       (... your call here ...)
+showPlot2("Time It Takes Two Robots To Clean 80% Of Variously Shaped Rooms", "Aspect Ratio", "Time-steps")
 #
